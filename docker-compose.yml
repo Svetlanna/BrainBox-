@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: brainbox-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    # Uncomment for live-reload during development (requires nodemon in package.json devDependencies)
+    # volumes:
+    #   - ./backend:/app
+    #   - ./database:/database
+    #   - /app/node_modules
