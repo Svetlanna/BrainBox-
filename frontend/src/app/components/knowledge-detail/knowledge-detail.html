@@ -1,0 +1,20 @@
+@if (knowledge) {
+  <div class="detail-card">
+    <h2>{{ knowledge.title }}</h2>
+    <span class="category">{{ knowledge.category }}</span>
+    <p>{{ knowledge.content }}</p>
+
+    <div class="tags">
+      @for (tag of knowledge.tags; track tag) {
+        <span class="tag">{{ tag }}</span>
+      }
+    </div>
+
+    <p class="date">Créé le {{ knowledge.createdAt }}</p>
+
+    <div class="actions">
+      <a [routerLink]="['/knowledge', knowledge._id, 'edit']">Modifier</a>
+      <a routerLink="/knowledge">← Retour à la liste</a>
+    </div>
+  </div>
+}

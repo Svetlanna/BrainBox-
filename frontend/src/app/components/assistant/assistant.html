@@ -1,0 +1,6 @@
+<h2>Assistant</h2>
+<textarea [(ngModel)]="question" placeholder="Pose ta question..." rows="3"></textarea>
+<button (click)="ask()">Envoyer</button>
+@if (response) {
+  <p class="response">{{ response }}</p>
+}

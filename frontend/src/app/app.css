@@ -1,0 +1,20 @@
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: #1e1e2f;
+}
+.navbar a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar a.active,
+.navbar a:hover {
+  color: #fff;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}

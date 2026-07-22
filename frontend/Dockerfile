@@ -1,14 +1,29 @@
-# Étape de build
-FROM node:22 AS build
+# ===========================
+# Étape 1 : Build Angular
+# ===========================
+FROM node:22-alpine AS build
+
 WORKDIR /app
+
+# Copie des dépendances
 COPY package*.json ./
-RUN npm install -g @angular/cli && npm install
+
+RUN npm install
+
+
 COPY . .
-RUN npm run build --prod
+
+
+RUN npm run build
+
 
 
 FROM nginx:alpine
-COPY --from=build /app/dist/CliniquePlus/browser /usr/share/nginx/html
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

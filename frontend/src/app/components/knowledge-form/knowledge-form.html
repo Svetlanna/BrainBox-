@@ -1,0 +1,34 @@
+<h2>{{ isEditMode ? 'Modifier' : 'Ajouter' }} une entrée</h2>
+
+@if (error) {
+  <p class="error">{{ error }}</p>
+}
+
+<form (ngSubmit)="onSubmit()" #f="ngForm">
+  <label>
+    Titre
+    <input type="text" name="title" [(ngModel)]="formData.title" required />
+  </label>
+
+  <label>
+    Catégorie
+    <input type="text" name="category" [(ngModel)]="formData.category" required />
+  </label>
+
+  <label>
+    Contenu
+    <textarea name="content" rows="5" [(ngModel)]="formData.content" required></textarea>
+  </label>
+
+  <label>
+    Tags (séparés par des virgules)
+    <input type="text" name="tags" [(ngModel)]="tagsInput" placeholder="docker, compose" />
+  </label>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="saving || f.invalid">
+      {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+    </button>
+    <a routerLink="/knowledge">Annuler</a>
+  </div>
+</form>
