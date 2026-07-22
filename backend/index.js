@@ -1,19 +1,33 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
-
+require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./database/mongo");
 const knowledgeRouter = require("./server");
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+global.db = null;
 
 app.use("/knowledge", knowledgeRouter);
 
+
+connectDB()
+  .then((dbb) => {
+    global.db = dbb;
+
+  })
+  .catch((err) => {
+    console.error("Échec de connexion à MongoDB :", err);
+    process.exit(1);
+  });
+
 app.listen(PORT, () => {
-  console.log(`Serveur démarré sur le port ${PORT}`);
-});
+      console.log(`Serveur démarré sur le port ${PORT}`);
+    });
