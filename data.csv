@@ -1,0 +1,107 @@
+[
+  {
+    "title": "Installer Docker Compose",
+    "content": "Pour démarrer les services définis dans un fichier docker-compose.yml, utiliser la commande : docker compose up -d",
+    "category": "Docker",
+    "tags": ["docker", "compose", "container"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Arrêter les conteneurs Docker",
+    "content": "La commande docker compose down arrête et supprime les conteneurs du projet.",
+    "category": "Docker",
+    "tags": ["docker", "compose"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Créer un projet Node.js",
+    "content": "Initialiser un projet Node.js avec npm init -y.",
+    "category": "Node.js",
+    "tags": ["node", "npm"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Installer Express",
+    "content": "Installer Express avec npm install express.",
+    "category": "Node.js",
+    "tags": ["express", "node"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Connexion MongoDB Atlas",
+    "content": "Utiliser MongoClient du package mongodb et la chaîne de connexion MongoDB Atlas stockée dans le fichier .env.",
+    "category": "MongoDB",
+    "tags": ["mongodb", "atlas", "database"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Créer une route GET Express",
+    "content": "app.get('/knowledge', (req, res) => { res.send('OK'); });",
+    "category": "Express",
+    "tags": ["express", "api", "get"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Créer une route POST Express",
+    "content": "app.post('/knowledge', (req, res) => { /* création */ });",
+    "category": "Express",
+    "tags": ["express", "api", "post"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Git - Premier commit",
+    "content": "git init puis git add . puis git commit -m \"Premier commit\".",
+    "category": "Git",
+    "tags": ["git", "versioning"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Créer un composant Angular",
+    "content": "Utiliser la commande ng generate component nomDuComposant.",
+    "category": "Angular",
+    "tags": ["angular", "component"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Créer un service Angular",
+    "content": "Utiliser la commande ng generate service services/knowledge.",
+    "category": "Angular",
+    "tags": ["angular", "service"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "HTTP GET avec Angular",
+    "content": "Le service HttpClient permet d'effectuer des requêtes HTTP. Exemple : this.http.get(url).",
+    "category": "Angular",
+    "tags": ["angular", "http"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Variables d'environnement Node",
+    "content": "Installer dotenv puis appeler require('dotenv').config() au démarrage de l'application.",
+    "category": "Node.js",
+    "tags": ["dotenv", "configuration"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Structure REST",
+    "content": "GET liste, GET/:id détail, POST création, PUT modification, DELETE suppression.",
+    "category": "API",
+    "tags": ["rest", "crud"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Recherche MongoDB",
+    "content": "Pour rechercher un texte, utiliser un filtre avec $regex et l'option i pour ignorer la casse.",
+    "category": "MongoDB",
+    "tags": ["mongodb", "search", "regex"],
+    "createdAt": "2026-07-22"
+  },
+  {
+    "title": "Prompt BrainBox",
+    "content": "Le prompt doit contenir uniquement les connaissances retrouvées dans la base. Si aucune connaissance ne répond à la question, le modèle doit répondre qu'il ne possède pas suffisamment d'informations.",
+    "category": "IA",
+    "tags": ["ollama", "prompt", "llm"],
+    "createdAt": "2026-07-22"
+  }
+]

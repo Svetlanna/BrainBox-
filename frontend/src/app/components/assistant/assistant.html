@@ -1,6 +1,45 @@
-<h2>Assistant</h2>
-<textarea [(ngModel)]="question" placeholder="Pose ta question..." rows="3"></textarea>
-<button (click)="ask()">Envoyer</button>
-@if (response) {
-  <p class="response">{{ response }}</p>
+<div class="header">
+  <h2>Assistant IA</h2>
+  <p class="subtitle">Interroge ta base de connaissances en langage naturel</p>
+</div>
+
+<div class="ask-card">
+  <textarea
+    [(ngModel)]="question"
+    placeholder="Ex : Comment créer un composant Angular ?"
+    rows="3"
+    (keydown.enter)="$event.preventDefault(); ask()"
+  ></textarea>
+  <button class="btn" (click)="ask()" [disabled]="loading || !question.trim()">
+    @if (loading) {
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    } @else {
+      Envoyer
+    }
+  </button>
+</div>
+
+@if (!response() && !loading) {
+  <div class="empty-state">
+    <p>Pose une question sur une connaissance que tu as enregistrée.</p>
+    <p class="empty-hint">BrainBox ne répond qu'à partir de ta base — jamais d'invention.</p>
+  </div>
+}
+
+@if (response()) {
+  <div class="answer-card">
+    <span class="answer-label">BrainBox</span>
+    <p class="answer-text">{{ response() }}</p>
+
+    @if (sources.length) {
+      <div class="sources">
+        <span class="sources-label">Sources</span>
+        <div class="tags">
+          @for (source of sources; track source) {
+            <span class="tag">{{ source }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
 }

@@ -32,6 +32,39 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const q = (req.query.q || "").toString().trim();
+    console.log("question"+q)
+    if (!q) {
+      const items = await global.db.collection("knowledge").find().toArray();
+      return res.json(items);
+    }
+
+    const regex = new RegExp(q, "i");
+
+    const items = await global.db
+      .collection("knowledge")
+      .find({
+        $or: [
+          { title: regex },
+          { content: regex },
+          { category: regex },
+          { tags: regex },
+        ],
+      })
+      .toArray();
+
+    res.json(items);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+
+
+
 // POST /knowledge
 router.post("/", async (req, res) => {
   try {

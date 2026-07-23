@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -13,23 +13,19 @@ import { KnowledgeService, Knowledge } from '../../services/knowledge';
 export class KnowledgeForm implements OnInit {
   isEditMode = false;
   knowledgeId: string | null = null;
-  saving = false;
-  error = '';
 
-  formData: Knowledge = {
-    title: '',
-    content: '',
-    category: '',
-    tags: [],
-  };
+  saving = signal(false);
+  error = signal('');
 
-  tagsInput = '';
+  title = signal('');
+  category = signal('');
+  content = signal('');
+  tagsInput = signal('');
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private knowledgeService: KnowledgeService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -39,43 +35,47 @@ export class KnowledgeForm implements OnInit {
     if (this.isEditMode && this.knowledgeId) {
       this.knowledgeService.getKnowledgeById(this.knowledgeId).subscribe({
         next: (data) => {
-          this.formData = data;
-          this.tagsInput = (data.tags || []).join(', ');
-          this.cdr.detectChanges(); // ← force l'affichage des valeurs dans les inputs
+          this.title.set(data.title);
+          this.category.set(data.category);
+          this.content.set(data.content);
+          this.tagsInput.set((data.tags || []).join(', '));
         },
         error: (err) => {
           console.error(err);
-          this.error = 'Impossible de charger cette entrée.';
-          this.cdr.detectChanges();
+          this.error.set('Impossible de charger cette entrée.');
         },
       });
     }
   }
 
   onSubmit(): void {
-    this.saving = true;
-    this.error = '';
+    this.saving.set(true);
+    this.error.set('');
 
-    this.formData.tags = this.tagsInput
-      .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
+    const formData: Knowledge = {
+      title: this.title(),
+      category: this.category(),
+      content: this.content(),
+      tags: this.tagsInput()
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0),
+    };
 
     const request =
       this.isEditMode && this.knowledgeId
-        ? this.knowledgeService.updateKnowledge(this.knowledgeId, this.formData)
-        : this.knowledgeService.createKnowledge(this.formData);
+        ? this.knowledgeService.updateKnowledge(this.knowledgeId, formData)
+        : this.knowledgeService.createKnowledge(formData);
 
     request.subscribe({
       next: () => {
-        this.saving = false;
+        this.saving.set(false);
         this.router.navigate(['/knowledge']);
       },
       error: (err) => {
         console.error(err);
-        this.error = "Erreur lors de l'enregistrement.";
-        this.saving = false;
-        this.cdr.detectChanges();
+        this.error.set("Erreur lors de l'enregistrement.");
+        this.saving.set(false);
       },
     });
   }

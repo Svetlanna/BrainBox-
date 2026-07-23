@@ -1,34 +1,39 @@
-<h2>{{ isEditMode ? 'Modifier' : 'Ajouter' }} une entrée</h2>
+<div class="header">
+  <h2>{{ isEditMode ? 'Modifier' : 'Ajouter' }} une entrée</h2>
+  <p class="subtitle">Une connaissance bien renseignée est plus facile à retrouver plus tard</p>
+</div>
 
-@if (error) {
-  <p class="error">{{ error }}</p>
+@if (error()) {
+  <p class="error">{{ error() }}</p>
 }
 
-<form (ngSubmit)="onSubmit()" #f="ngForm">
+<form (ngSubmit)="onSubmit()" #f="ngForm" class="form-card">
   <label>
-    Titre
-    <input type="text" name="title" [(ngModel)]="formData.title" required />
+    <span class="label-text">Titre</span>
+    <input type="text" name="title" [ngModel]="title()" (ngModelChange)="title.set($event)" placeholder="Ex : Créer un composant Angular" required />
   </label>
 
   <label>
-    Catégorie
-    <input type="text" name="category" [(ngModel)]="formData.category" required />
+    <span class="label-text">Catégorie</span>
+    <input type="text" name="category" [ngModel]="category()" (ngModelChange)="category.set($event)" placeholder="Ex : Angular, Docker, Express..." required />
   </label>
 
   <label>
-    Contenu
-    <textarea name="content" rows="5" [(ngModel)]="formData.content" required></textarea>
+    <span class="label-text">Contenu</span>
+    <textarea name="content" rows="6" [ngModel]="content()" (ngModelChange)="content.set($event)" placeholder="Décris la connaissance : commande, extrait de code, explication..." required></textarea>
   </label>
 
   <label>
-    Tags (séparés par des virgules)
-    <input type="text" name="tags" [(ngModel)]="tagsInput" placeholder="docker, compose" />
+    <span class="label-text">Tags</span>
+    <input type="text" name="tags" [ngModel]="tagsInput()" (ngModelChange)="tagsInput.set($event)" placeholder="docker, compose, cli" />
+    <span class="hint">Séparés par des virgules</span>
   </label>
 
   <div class="form-actions">
-    <button type="submit" [disabled]="saving || f.invalid">
-      {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+    <a routerLink="/knowledge" class="btn-cancel">Annuler</a>
+    <button type="submit" class="btn-submit" [disabled]="saving() || f.invalid">
+      {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
     </button>
-    <a routerLink="/knowledge">Annuler</a>
   </div>
 </form>
+

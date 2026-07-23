@@ -38,4 +38,9 @@ export class KnowledgeService {
   deleteKnowledge(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  searchKnowledge(query: string): Observable<Knowledge[]> {
+    return this.http.get<Knowledge[]>(`${this.apiUrl}/search`, {
+      params: { q: query },
+    });
+  }
 }
