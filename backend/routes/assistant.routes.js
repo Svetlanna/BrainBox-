@@ -27,8 +27,10 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const prompt = buildPrompt(question, knowledgeItems);
-    const t2 = Date.now();
+const prompt = buildPrompt(question, knowledgeItems);
+const t2 = Date.now();
+console.log(`[2] Construction du prompt : ${t2 - t1} ms — longueur : ${prompt.length} caractères`);
+console.log("--- PROMPT ENVOYÉ À OLLAMA ---\n" + prompt + "\n--- FIN DU PROMPT ---");
     console.log(`[2] Construction du prompt : ${t2 - t1} ms — longueur : ${prompt.length} caractères`);
 
     const answer = await generateResponse(prompt);
