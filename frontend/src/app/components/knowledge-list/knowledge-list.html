@@ -3,15 +3,18 @@
   <a routerLink="/knowledge/new" class="btn">+ Nouvelle entrée</a>
 </div>
 
-@if (loading) {
-  <p>Chargement...</p>
-}@else if (error) {
-  <p class="error">{{ error }}</p>
-}@else if (knowledgeList.length === 0) {
-  <p>Aucune entrée pour le moment.</p>
+@if (loading()) {
+  <p class="loading-text">Chargement...</p>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+} @else if (knowledgeList().length === 0) {
+  <div class="empty-state">
+    <p>Aucune entrée pour le moment.</p>
+    <p>Ajoute ta première connaissance pour commencer à interroger BrainBox.</p>
+  </div>
 } @else {
   <div class="knowledge-grid">
-    @for (item of knowledgeList; track item._id) {
+    @for (item of knowledgeList(); track item._id) {
       <div class="card">
         <h3>{{ item.title }}</h3>
         <span class="category">{{ item.category }}</span>

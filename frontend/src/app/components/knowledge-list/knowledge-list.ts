@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { KnowledgeService, Knowledge } from '../../services/knowledge';
@@ -10,33 +10,28 @@ import { KnowledgeService, Knowledge } from '../../services/knowledge';
   styleUrl: './knowledge-list.css',
 })
 export class KnowledgeList implements OnInit {
-  knowledgeList: Knowledge[] = [];
-  loading = true;
-  error = '';
+  knowledgeList = signal<Knowledge[]>([]);
+  loading = signal(true);
+  error = signal('');
 
-  constructor(
-    private knowledgeService: KnowledgeService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private knowledgeService: KnowledgeService) {}
 
   ngOnInit(): void {
     this.loadKnowledge();
   }
 
   loadKnowledge(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.knowledgeService.getAllKnowledge().subscribe({
       next: (data) => {
         console.log('Réponse reçue :', data);
-        this.knowledgeList = data;
-        this.loading = false;
-        this.cdr.detectChanges(); // ← force la mise à jour de la vue
+        this.knowledgeList.set(data);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error('Erreur reçue :', err);
-        this.error = 'Impossible de charger les données.';
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.error.set('Impossible de charger les données.');
+        this.loading.set(false);
       },
     });
   }
@@ -47,8 +42,7 @@ export class KnowledgeList implements OnInit {
 
     this.knowledgeService.deleteKnowledge(id).subscribe({
       next: () => {
-        this.knowledgeList = this.knowledgeList.filter((k) => k._id !== id);
-        this.cdr.detectChanges();
+        this.knowledgeList.update((list) => list.filter((k) => k._id !== id));
       },
       error: (err) => console.error(err),
     });
