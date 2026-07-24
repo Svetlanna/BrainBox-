@@ -1,6 +1,6 @@
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 
-async function generateResponse(prompt, model = "qwen2.5:0.5b")  {
+async function generateResponse(prompt, model = "qwen2.5:0.5b") {
   const res = await fetch(`${OLLAMA_URL}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -9,7 +9,8 @@ async function generateResponse(prompt, model = "qwen2.5:0.5b")  {
       prompt,
       stream: false,
       options: {
-        num_predict: 200, 
+        num_predict: 200,
+        temperature: 0.1,
       },
     }),
   });

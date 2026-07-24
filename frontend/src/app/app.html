@@ -7,6 +7,10 @@
 
   <span class="spacer"></span>
 
+
+
+
+
   @if (authService.isLoggedIn()) {
     <span class="user-badge">{{ authService.currentUser()?.email }} ({{ authService.currentUser()?.role }})</span>
     <a (click)="logout()" class="logout-link">Déconnexion</a>

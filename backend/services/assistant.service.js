@@ -51,9 +51,8 @@ async function findRelevantKnowledge(question) {
     .map((item) => item.doc);
 }
 
-/**
- * le prompt final : le modèle ne doit répondre qu'avec les
- */
+
+
 function buildPrompt(question, knowledgeItems) {
   const knowledgeText = knowledgeItems.length
     ? knowledgeItems
