@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { KnowledgeService, Knowledge } from '../../services/knowledge';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-knowledge-detail',
@@ -17,6 +18,7 @@ export class KnowledgeDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private knowledgeService: KnowledgeService,
+    protected authService: AuthService,
   ) {}
 
   ngOnInit(): void {

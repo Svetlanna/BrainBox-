@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { KnowledgeService, Knowledge } from '../../services/knowledge';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-knowledge-list',
@@ -14,7 +15,10 @@ export class KnowledgeList implements OnInit {
   loading = signal(true);
   error = signal('');
 
-  constructor(private knowledgeService: KnowledgeService) {}
+  constructor(
+    private knowledgeService: KnowledgeService,
+    protected authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
     this.loadKnowledge();

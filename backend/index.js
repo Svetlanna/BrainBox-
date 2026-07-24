@@ -6,7 +6,7 @@ const cors = require("cors");
 const connectDB = require("./database/mongo");
 const knowledgeRouter = require("./server");
 const assistantRouter = require("./routes/assistant.routes");
-
+const authRouter = require("./routes/auth.routes");
 
 const app = express();
 app.use(cors());
@@ -15,7 +15,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 global.db = null;
-
+app.use("/auth", authRouter);
 app.use("/knowledge", knowledgeRouter);
 app.use("/assistant", assistantRouter);
 

@@ -1,6 +1,8 @@
 <div class="header">
   <h2>Base de connaissances</h2>
-  <a routerLink="/knowledge/new" class="btn">+ Nouvelle entrée</a>
+  @if (authService.isAdmin()) {
+    <a routerLink="/knowledge/new" class="btn">+ Nouvelle entrée</a>
+  }
 </div>
 
 @if (loading()) {
@@ -26,8 +28,10 @@
         </div>
         <div class="actions">
           <a [routerLink]="['/knowledge', item._id]">Voir</a>
-          <a [routerLink]="['/knowledge', item._id, 'edit']">Modifier</a>
-          <button (click)="deleteKnowledge(item._id)">Supprimer</button>
+          @if (authService.isAdmin()) {
+            <a [routerLink]="['/knowledge', item._id, 'edit']">Modifier</a>
+            <button (click)="deleteKnowledge(item._id)">Supprimer</button>
+          }
         </div>
       </div>
     }

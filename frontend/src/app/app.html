@@ -1,7 +1,18 @@
 <nav class="navbar">
   <a routerLink="/knowledge" routerLinkActive="active">List</a>
-  <a routerLink="/knowledge/new" routerLinkActive="active">+ Ajouter</a>
+  @if (authService.isAdmin()) {
+    <a routerLink="/knowledge/new" routerLinkActive="active">+ Ajouter</a>
+  }
   <a routerLink="/assistant" routerLinkActive="active">IA Assistant</a>
+
+  <span class="spacer"></span>
+
+  @if (authService.isLoggedIn()) {
+    <span class="user-badge">{{ authService.currentUser()?.email }} ({{ authService.currentUser()?.role }})</span>
+    <a (click)="logout()" class="logout-link">Déconnexion</a>
+  } @else {
+    <a routerLink="/login" routerLinkActive="active">Connexion</a>
+  }
 </nav>
 
 <main class="container">

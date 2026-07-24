@@ -17,7 +17,9 @@
     <p class="date">Créé le {{ knowledge()!.createdAt }}</p>
 
     <div class="actions">
-      <a [routerLink]="['/knowledge', knowledge()!._id, 'edit']">Modifier</a>
+      @if (authService.isAdmin()) {
+        <a [routerLink]="['/knowledge', knowledge()!._id, 'edit']">Modifier</a>
+      }
       <a routerLink="/knowledge">← Retour à la liste</a>
     </div>
   </div>

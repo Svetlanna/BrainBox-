@@ -1,0 +1,55 @@
+<div class="login-page">
+  <form (ngSubmit)="onSubmit()" #f="ngForm" class="login-card">
+    <h2>Connexion</h2>
+    <p class="subtitle">Accède à ta base de connaissances BrainBox</p>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <label>
+      <span class="label-text">Email</span>
+      <input type="email" name="email" [ngModel]="email()" (ngModelChange)="email.set($event)" required />
+    </label>
+
+    <label>
+      <span class="label-text">Mot de passe</span>
+      <input type="password" name="password" [ngModel]="password()" (ngModelChange)="password.set($event)" required />
+    </label>
+
+    <button type="submit" [disabled]="loading() || f.invalid">
+      {{ loading() ? 'Connexion...' : 'Se connecter' }}
+    </button>
+  </form>
+
+  <!-- TODO (dev team) : bloc temporaire, à supprimer avant la mise en prod -->
+  <div class="dev-note">
+    <p class="dev-note-title">🛠 Comptes de test (à retirer avant prod)</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Mot de passe</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>admin&#64;brainbox.com</td>
+          <td>Admin123!</td>
+          <td>admin</td>
+        </tr>
+        <tr>
+          <td>editor&#64;brainbox.com</td>
+          <td>Editor123!</td>
+          <td>editor</td>
+        </tr>
+        <tr>
+          <td>customer&#64;brainbox.com</td>
+          <td>Customer123!</td>
+          <td>customer</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
