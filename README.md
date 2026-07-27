@@ -119,8 +119,23 @@ curl http://localhost:3000/assistant -X POST -H "Content-Type: application/json"
 | Méthode | Route | Accès | Description |
 |---|---|---|---|
 | POST | `/assistant` | Tous (connectés) | Pose une question ; recherche dans MongoDB, construit le prompt, interroge Ollama, renvoie la réponse et les sources utilisées |
+| POST | `/assistant/generate` | Tous (connectés) | Génère une réponse de secours (sans contexte de la base) quand aucune connaissance ne permet de répondre, ainsi qu'un titre suggéré |
+| POST | `/assistant/save-generated` | Tous (connectés) | Enregistre dans MongoDB la réponse générée, éventuellement corrigée par l'utilisateur, comme nouvelle connaissance |
 
 Toutes les routes protégées attendent un en-tête `Authorization: Bearer <token>`.
+
+### Génération de réponse de secours et enregistrement dans la base
+
+Quand la recherche par mots-clés ne trouve aucune connaissance pertinente — ou que les connaissances trouvées ne suffisent pas à répondre à la question — l'API ne se contente pas de répondre "je ne sais pas" : elle propose à l'utilisateur de générer une réponse et de l'ajouter à la base, pour que la même question trouve une réponse la prochaine fois.
+
+Le déroulement est le suivant :
+
+1. **Détection du manque d'information.** Sur `POST /assistant`, si aucun document ne matche la question, l'API répond directement `canGenerate: true`. Si des documents ont été trouvés mais que la réponse générée par Ollama ressemble malgré tout à un refus ("je ne possède pas suffisamment d'informations", "je ne sais pas", etc.), `canGenerate` passe aussi à `true` — le modèle étant petit (`qwen2.5:0.5b`), il ne reformule pas toujours la phrase de refus à l'identique, d'où une détection par expressions régulières plutôt qu'une simple égalité de texte.
+2. **Génération de la proposition.** Quand l'utilisateur clique sur "Générer une proposition", le frontend appelle `POST /assistant/generate`. Contrairement à `/assistant`, ce prompt ne contient aucune connaissance de la base : Ollama répond avec ses connaissances générales. En parallèle, un second appel au modèle reformule la question en un titre court et neutre (`generateTitle`), utilisé comme titre par défaut de la nouvelle fiche.
+3. **Relecture et correction.** La réponse générée et le titre suggéré sont affichés dans un formulaire éditable côté frontend. L'utilisateur peut corriger le contenu avant de l'enregistrer — rien n'est écrit en base tant que l'utilisateur n'a pas validé.
+4. **Enregistrement.** À la validation, le frontend envoie le titre et le contenu (éventuellement modifiés) à `POST /assistant/save-generated`. La route insère un nouveau document dans la collection `knowledge`, avec la catégorie `Généré automatiquement` et le tag `auto-généré`, ce qui permet de repérer facilement, plus tard, les connaissances ajoutées par ce mécanisme plutôt que saisies manuellement.
+
+Ce circuit permet à la base de connaissances de s'enrichir progressivement à partir des questions posées à l'assistant, sans jamais insérer automatiquement une réponse non validée par un utilisateur.
 
 ## Modèle utilisé
 

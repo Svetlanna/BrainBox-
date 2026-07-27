@@ -5,13 +5,14 @@
 
 <div class="ask-card">
   <textarea
-    [(ngModel)]="question"
+    [ngModel]="question()"
+    (ngModelChange)="question.set($event)"
     placeholder="Ex : Comment créer un composant Angular ?"
     rows="3"
     (keydown.enter)="$event.preventDefault(); ask()"
   ></textarea>
-  <button class="btn" (click)="ask()" [disabled]="loading || !question.trim()">
-    @if (loading) {
+  <button class="btn" (click)="ask()" [disabled]="loading() || !question().trim()">
+    @if (loading()) {
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
     } @else {
       Envoyer
@@ -19,27 +20,75 @@
   </button>
 </div>
 
-@if (!response() && !loading) {
+@if (!response() && !loading() && !isEditing()) {
   <div class="empty-state">
     <p>Pose une question sur une connaissance que tu as enregistrée.</p>
     <p class="empty-hint">BrainBox ne répond qu'à partir de ta base — jamais d'invention.</p>
   </div>
 }
 
-@if (response()) {
+@if (response() && !isEditing()) {
   <div class="answer-card">
     <span class="answer-label">BrainBox</span>
     <p class="answer-text">{{ response() }}</p>
 
-    @if (sources.length) {
+    @if (sources().length) {
       <div class="sources">
         <span class="sources-label">Sources</span>
         <div class="tags">
-          @for (source of sources; track source) {
+          @for (source of sources(); track source) {
             <span class="tag">{{ source }}</span>
           }
         </div>
       </div>
     }
+
+    @if (canGenerate()) {
+      <div class="generate-box">
+        <p class="generate-text">
+          Aucune connaissance ne correspond à cette question. Veux-tu que le modèle
+          propose une réponse générale, que tu pourras modifier avant de l'enregistrer ?
+        </p>
+        <button class="btn-generate" (click)="generateAnyway()" [disabled]="generating()">
+          {{ generating() ? 'Génération en cours...' : 'Générer une proposition' }}
+        </button>
+      </div>
+    }
+
+    @if (savedTitle()) {
+      <p class="generated-note">Enregistré dans ta base sous le titre : "{{ savedTitle() }}"</p>
+    }
+  </div>
+}
+
+@if (isEditing()) {
+  <div class="edit-card">
+    <span class="answer-label">Proposition à valider</span>
+    <p class="edit-hint">Relis et modifie si besoin avant d'enregistrer dans ta base.</p>
+
+    <label>
+      <span class="label-text">Titre</span>
+      <input
+        type="text"
+        [ngModel]="editingTitle()"
+        (ngModelChange)="editingTitle.set($event)"
+      />
+    </label>
+
+    <label>
+      <span class="label-text">Contenu</span>
+      <textarea
+        rows="6"
+        [ngModel]="editingContent()"
+        (ngModelChange)="editingContent.set($event)"
+      ></textarea>
+    </label>
+
+    <div class="edit-actions">
+      <button class="btn-cancel" (click)="cancelEditing()">Annuler</button>
+      <button class="btn-save" (click)="saveGenerated()" [disabled]="saving()">
+        {{ saving() ? 'Enregistrement...' : 'Enregistrer dans ma base' }}
+      </button>
+    </div>
   </div>
 }
